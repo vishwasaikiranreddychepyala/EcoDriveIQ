@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoDriveIQ v2 – Advanced Fuel Intelligence</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">
+    <span class="logo-icon">🌿</span>
+    <span class="logo-text">EcoDriveIQ</span>
+    <span class="version-badge">v2.0</span>
+  </div>
+  <p class="tagline">From Prediction to Prevention &nbsp;|&nbsp; Advanced AI Platform</p>
+</header>
+
+<!-- STATS BAR -->
+<div class="stats-bar" id="statsBar">
+  <div class="stat-item"><span class="stat-val" id="sTotalTrips">—</span><span class="stat-label">Trips</span></div>
+  <div class="stat-item"><span class="stat-val" id="sAvgEco">—</span><span class="stat-label">Avg Eco</span></div>
+  <div class="stat-item"><span class="stat-val" id="sTotalCost">—</span><span class="stat-label">Total Spent</span></div>
+  <div class="stat-item"><span class="stat-val" id="sTotalCarbon">—</span><span class="stat-label">CO₂ (kg)</span></div>
+  <div class="stat-item"><span class="stat-val" id="sAnomalies">—</span><span class="stat-label">Anomalies</span></div>
+  <div class="stat-item"><span class="stat-val" id="sEvSavings">—</span><span class="stat-label">EV Savings</span></div>
+</div>
+
+<div class="main-container">
+
+  <!-- ═══ INPUT PANEL ════════════════════════════════════════════════════════ -->
+  <section class="card input-card">
+    <h2 class="card-title">🚗 Trip Intelligence Input</h2>
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>Vehicle Type</label>
+        <select id="vehicle_type">
+          <option>Car</option><option>Bike</option>
+          <option>Truck</option><option>Auto</option><option>SUV</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Fuel Type</label>
+        <select id="fuel_type">
+          <option>Petrol</option><option>Diesel</option><option>CNG</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Road Type</label>
+        <select id="road_type">
+          <option>City</option><option>Highway</option><option>Mixed</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Time of Day</label>
+        <select id="time_of_day">
+          <option>Morning</option><option>Afternoon</option>
+          <option>Evening</option><option>Night</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Weather</label>
+        <select id="weather">
+          <option>Clear</option><option>Rain</option>
+          <option>Fog</option><option>Hot</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Distance (km)</label>
+        <input type="number" id="distance_km" placeholder="e.g. 15"/>
+      </div>
+      <div class="form-group">
+        <label>Avg Speed (km/h)</label>
+        <input type="number" id="avg_speed_kmph" placeholder="e.g. 35"/>
+      </div>
+      <div class="form-group">
+        <label>Traffic Level (1–5)</label>
+        <input type="number" id="traffic_level" placeholder="1=Free 5=Jammed" min="1" max="5"/>
+      </div>
+      <div class="form-group">
+        <label>AC Used?</label>
+        <select id="ac_used">
+          <option value="1">Yes</option><option value="0">No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Load / Weight (kg)</label>
+        <input type="number" id="load_kg" placeholder="e.g. 80"/>
+      </div>
+      <div class="form-group">
+        <label>Engine CC</label>
+        <input type="number" id="engine_cc" placeholder="e.g. 1200"/>
+      </div>
+      <div class="form-group">
+        <label>Tyre Pressure OK?</label>
+        <select id="tyre_pressure_ok">
+          <option value="1">Yes</option><option value="0">No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Days Since Last Service</label>
+        <input type="number" id="last_service_days" placeholder="e.g. 45"/>
+      </div>
+      <div class="form-group">
+        <label>Fuel Price (₹/litre)</label>
+        <input type="number" id="fuel_price_per_litre" placeholder="e.g. 105.5" step="0.1"/>
+      </div>
+
+      <!-- ADVANCED INPUTS -->
+      <div class="form-group adv">
+        <label>Driver Hours Today</label>
+        <input type="number" id="driver_hours_today" placeholder="e.g. 4" step="0.5"/>
+      </div>
+      <div class="form-group adv">
+        <label>Idle Time (minutes)</label>
+        <input type="number" id="idle_time_minutes" placeholder="e.g. 8"/>
+      </div>
+      <div class="form-group adv">
+        <label>Harsh Braking Count</label>
+        <input type="number" id="harsh_braking_count" placeholder="e.g. 3"/>
+      </div>
+      <div class="form-group adv">
+        <label>Avg RPM</label>
+        <input type="number" id="rpm_avg" placeholder="e.g. 1800"/>
+      </div>
+      <div class="form-group adv">
+        <label>Trips Per Month</label>
+        <input type="number" id="trips_per_month" placeholder="e.g. 60"/>
+      </div>
+    </div>
+
+    <button class="btn-predict" onclick="predict()">
+      ⚡ Analyze Trip Intelligence
+    </button>
+    <button class="btn-secondary" style="width:100%;margin-top:.6rem" onclick="runWhatIf()">
+      🔮 Run What-If Optimizer
+    </button>
+  </section>
+
+  <!-- ═══ RESULTS PANEL ══════════════════════════════════════════════════════ -->
+  <section class="card results-card" id="resultsPanel" style="display:none">
+    <h2 class="card-title">📊 Intelligence Report</h2>
+
+    <!-- TOP ROW: Eco Score + Grade + Fatigue -->
+    <div class="top-metrics">
+      <div class="eco-score-ring">
+        <svg viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#1a1a35" stroke-width="10"/>
+          <circle cx="60" cy="60" r="50" fill="none" stroke="url(#grad1)"
+                  stroke-width="10" stroke-dasharray="314" stroke-dashoffset="314"
+                  stroke-linecap="round" id="ecoCircle" transform="rotate(-90 60 60)"/>
+          <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#00f5d4"/>
+              <stop offset="100%" style="stop-color:#7b2ff7"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="eco-score-text">
+          <span id="ecoScoreVal">—</span>
+          <small>Eco Score</small>
+        </div>
+      </div>
+
+      <div class="grade-panel">
+        <div class="grade-box" id="gradeBox">
+          <span id="gradeVal">—</span>
+          <small id="gradeLabel">Grade</small>
+        </div>
+        <div class="mini-metric">
+          <span class="mm-label">Fatigue Risk</span>
+          <div class="mini-bar-wrap">
+            <div class="mini-bar" id="fatigueBar"></div>
+          </div>
+          <span class="mm-val" id="fatigueVal">—</span>
+        </div>
+        <div class="mini-metric">
+          <span class="mm-label">Vehicle Health</span>
+          <div class="mini-bar-wrap">
+            <div class="mini-bar health-bar" id="maintBar"></div>
+          </div>
+          <span class="mm-val" id="maintVal">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALERTS ROW -->
+    <div id="anomalyAlert" class="alert-box alert-danger" style="display:none">
+      🔍 <strong>ANOMALY DETECTED</strong> — Fuel consumption is statistically abnormal. Possible fuel leak or engine issue.
+    </div>
+    <div id="fatigueAlert" class="alert-box alert-warn" style="display:none">
+      😴 <strong>HIGH FATIGUE RISK</strong> — Please take a break. Fatigue triples accident risk.
+    </div>
+
+    <!-- CORE PREDICTIONS -->
+    <div class="result-grid">
+      <div class="result-box">
+        <div class="rb-icon">⛽</div>
+        <div class="rb-val" id="rFuel">—</div>
+        <div class="rb-label">Fuel (Litres)</div>
+      </div>
+      <div class="result-box">
+        <div class="rb-icon">💰</div>
+        <div class="rb-val" id="rCost">—</div>
+        <div class="rb-label">Trip Cost (₹)</div>
+      </div>
+      <div class="result-box">
+        <div class="rb-icon">🌫️</div>
+        <div class="rb-val" id="rCarbon">—</div>
+        <div class="rb-label">CO₂ (kg)</div>
+      </div>
+      <div class="result-box">
+        <div class="rb-icon">🌳</div>
+        <div class="rb-val" id="rTrees">—</div>
+        <div class="rb-label">Trees/Day</div>
+      </div>
+      <div class="result-box">
+        <div class="rb-icon">♻️</div>
+        <div class="rb-val" id="rOffset">—</div>
+        <div class="rb-label">Offset Cost (₹)</div>
+      </div>
+    </div>
+
+    <!-- FUEL COMPARISON TABLE -->
+    <div class="comparison-panel">
+      <h3>⚡ Fuel Mode Comparison</h3>
+      <table class="comp-table">
+        <thead>
+          <tr><th>Mode</th><th>Per Trip</th><th>Monthly</th><th>Annual</th><th>Annual Savings</th></tr>
+        </thead>
+        <tbody>
+          <tr class="row-petrol">
+            <td>⛽ Petrol</td>
+            <td id="cPetrolTrip">—</td>
+            <td id="cPetrolMonth">—</td>
+            <td id="cPetrolYear">—</td>
+            <td>—</td>
+          </tr>
+          <tr class="row-cng">
+            <td>🔵 CNG</td>
+            <td id="cCngTrip">—</td>
+            <td id="cCngMonth">—</td>
+            <td id="cCngYear">—</td>
+            <td id="cCngSave" class="save-val">—</td>
+          </tr>
+          <tr class="row-ev">
+            <td>⚡ EV</td>
+            <td id="cEvTrip">—</td>
+            <td id="cEvMonth">—</td>
+            <td id="cEvYear">—</td>
+            <td id="cEvSave" class="save-val">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- EV BREAK-EVEN -->
+    <div class="forecast-panel" id="evBreakEvenPanel">
+      <h3>🔋 EV Break-Even Analysis</h3>
+      <p id="evBreakEvenText" style="font-size:.9rem;color:var(--text);line-height:1.6">—</p>
+    </div>
+
+    <!-- FUEL PRICE IMPACT -->
+    <div class="forecast-panel">
+      <h3>🔮 Future Fuel Price Impact (Per Trip)</h3>
+      <div class="forecast-grid">
+        <div class="fc-box"><span class="fc-label">@ ₹110/L</span><span class="fc-val" id="rAt110">—</span></div>
+        <div class="fc-box"><span class="fc-label">@ ₹120/L</span><span class="fc-val" id="rAt120">—</span></div>
+        <div class="fc-box"><span class="fc-label">@ ₹130/L</span><span class="fc-val" id="rAt130">—</span></div>
+      </div>
+    </div>
+
+    <!-- RECOMMENDATIONS -->
+    <div class="recommendations" id="recommendationsBox">
+      <h3>🤖 AI Driving Coach</h3>
+      <div id="recText">—</div>
+    </div>
+
+    <div style="display:flex;gap:.7rem;margin-top:1rem;flex-wrap:wrap">
+      <button class="btn-secondary" onclick="loadHistory()">📋 Trip History</button>
+      <button class="btn-secondary" onclick="loadFleet()">🚛 Fleet Analytics</button>
+      <button class="btn-secondary" onclick="loadTrend()">📈 7-Day Trend</button>
+    </div>
+  </section>
+</div>
+
+<!-- WHAT-IF RESULTS -->
+<div class="history-section" id="whatIfSection" style="display:none">
+  <h2>🔮 What-If Optimizer Results</h2>
+  <div class="whatif-grid" id="whatIfGrid"></div>
+</div>
+
+<!-- TREND CHART -->
+<div class="history-section" id="trendSection" style="display:none">
+  <h2>📈 7-Day Eco Trend</h2>
+  <canvas id="trendChart" height="80"></canvas>
+</div>
+
+<!-- FLEET TABLE -->
+<div class="history-section" id="fleetSection" style="display:none">
+  <h2>🚛 Fleet Intelligence</h2>
+  <div class="table-wrap">
+    <table id="fleetTable">
+      <thead>
+        <tr><th>Vehicle</th><th>Trips</th><th>Avg Eco</th><th>Avg Fuel(L)</th><th>Total Cost(₹)</th><th>Health Score</th><th>Anomalies</th></tr>
+      </thead>
+      <tbody id="fleetBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- HISTORY TABLE -->
+<div class="history-section" id="historySection" style="display:none">
+  <h2>📋 Trip History</h2>
+  <div class="table-wrap">
+    <table id="historyTable">
+      <thead>
+        <tr><th>#</th><th>Date</th><th>Vehicle</th><th>Dist</th><th>Fuel(L)</th><th>Cost(₹)</th><th>CO₂(kg)</th><th>Eco</th><th>Grade</th><th>Anomaly</th></tr>
+      </thead>
+      <tbody id="historyBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<footer class="footer">
+  🌿 EcoDriveIQ v2.0 &nbsp;|&nbsp; Team FutureForge &nbsp;|&nbsp; AI + Azure + Sustainability
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="/static/js/script.js"></script>
+</body>
+</html>

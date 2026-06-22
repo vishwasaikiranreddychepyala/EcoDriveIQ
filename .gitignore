@@ -1,7 +1,6 @@
 venv/
 __pycache__/
 *.pyc
-*.pkl
-database/trips.db
 .DS_Store
 *.env
+database/trips.db
